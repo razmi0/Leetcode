@@ -28,6 +28,7 @@ class Box {
     this.fn = () => {};
   }
   find(args: any) {
+    if (!this.fn) throw new Error("fn not defined, please register fn first");
     let temp = args.join(",");
     if (this.keys.has(temp)) {
       return this.keys.get(args);
@@ -38,14 +39,39 @@ class Box {
     }
   }
   register(fn: Fn) {
+    if (typeof this.fn !== "function") throw new Error("fn is not a function");
     this.fn = fn;
     return this;
   }
+  clean() {
+    this.keys.clear();
+    return this;
+  }
+  size() {
+    return this.keys.size;
+  }
 }
 
-const box = new Box().register((a, b) => a + b);
-console.log(box.find([1, 2]));
-console.log(box.keys);
+const box2 = {
+  keys: new Map(),
+  values: [] as any[],
+};
+function memoize2(fn: Fn): Fn {
+  const box = new Map();
+  return function (...args) {
+    let key = JSON.stringify(args);
+    if (box.has(key)) {
+      return box.get(key);
+    } else {
+      let ans = fn(...args);
+      box.set(key, ans);
+      return ans;
+    }
+  };
+}
+
+const box = new Box().register((a, b) => a + b).find([1, 2]);
+console.log("🚀 ~ file: Cache.ts:51 ~ box:", box);
 
 type Fn = (...params: any) => any;
 
