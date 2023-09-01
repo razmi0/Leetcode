@@ -1,6 +1,5 @@
 import { memoryUsage } from "node:process";
 import chalk from "chalk";
-
 export function perf(fn: Function, args: unknown[], cap: number) {
   const times = {
     sum: 0,

@@ -11,7 +11,6 @@ Array.prototype.snail = function (
   if (rowsCount * colsCount !== this.length) {
     return [];
   }
-  let k = 0;
   const res: number[][] = Array.from({ length: rowsCount }, (_, row) => {
     return Array.from({ length: colsCount }, (__, col) => {
       return this[
