@@ -20,8 +20,6 @@ Function.prototype.callPolyfill = function (context, ...args): any {
 
 function increment(this: { count: number }) {
   this.count++;
-  console.log(this.count);
-
   return this.count;
 }
 increment.callPolyfill({ count: 1 }); // 2
