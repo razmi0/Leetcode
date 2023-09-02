@@ -6,6 +6,6 @@ console.log(
       return arg;
     },
     ["---"],
-    100
+    729
   )
 );
