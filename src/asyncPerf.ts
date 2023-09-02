@@ -18,6 +18,10 @@ type Utils = {
     factors: number[];
   };
 };
+type UtilType = {
+  units: string[];
+  factors: number[];
+};
 
 export function asyncPerf(fn: Function, args: unknown[], cap: number): string {
   let [times, heaps, temp, utils] = init();
@@ -92,7 +96,7 @@ function isObject(obj: unknown): obj is Record<string, unknown> {
   return typeof obj === "object" && obj !== null && !Array.isArray(obj);
 }
 
-function convert(data: number, utils: { units: string[]; factors: number[] }) {
+function convert(data: number, utils: UtilType) {
   const { units, factors } = utils;
   let i = 0;
   let holdSum: number = data;
