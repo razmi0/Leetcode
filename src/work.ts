@@ -1,7 +1,6 @@
 import { asyncPerf } from "./asyncPerf.js";
-
 // console.log(
-//   asyncPerf(
+//   perf(
 //     (arg: string) => {
 //       return arg;
 //     },
@@ -27,5 +26,10 @@ function wordPattern(pattern: string, s: string): boolean {
   }
   return true;
 }
+let runtime = true;
+(async () => {
+  const a = asyncPerf(wordPattern, ["abba", "dog cat cat fish"], 10); // false
+  a.then(console.log).then(() => (runtime = false));
+})();
 
-console.log(asyncPerf(wordPattern, ["abba", "dog cat cat fish"], 10000)); // false
+console.log(runtime);

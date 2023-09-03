@@ -33,29 +33,63 @@ type UtilType<U, F> = {
 type Fn<Y> = (...args: Y[]) => any;
 type Args<Y> = Y[];
 
-export const asyncPerf = <T>(fn: Fn<T>, args: Args<T>, cap: number): string => {
-  //init
-  let [times, heaps, trash, utils, { stats_time, stats_mem }] = init();
+class Trash {
+  public value: unknown | Record<string, unknown> | (string & {});
+  public dressed: string | null = null;
+  private isObject(): this is { value: Record<string, unknown> } {
+    return typeof this.value === "object" && this.value !== null && !Array.isArray(this.value);
+  }
+  dress(): this | string {
+    if (this.isObject()) {
+      let arr: any[][] = Object.entries(this.value);
+      arr = arr.map((entry) => {
+        return entry.map((value) => {
+          typeof value === "function" || (value && value.constructor === RegExp)
+            ? (value = value.toString())
+            : value;
+          return value;
+        });
+      });
+      this.value = Object.fromEntries(arr);
+      return (this.dressed = JSON.stringify(this.value, null, 15));
+    }
+    return this;
+  }
+  valueOf() {
+    return this.dress() || this.value;
+  }
+  pick(value: unknown) {
+    this.value = value;
+    return this;
+  }
+  get() {
+    return this.value;
+  }
+}
 
-  // test
-  for (let i = 0; i < cap; i++) trash = memTest(fn, args, heaps.stock, trash);
-  for (let i = 0; i < cap; i++) trash = speedTest(fn, args, times.stock, trash);
+export const asyncPerf = async <T>(fn: Fn<T>, args: Args<T>, cap: number): Promise<string> => {
+  return new Promise((resolve) => {
+    //init
+    const trash = new Trash();
+    let [times, heaps, utils, { stats_time, stats_mem }] = init();
 
-  // stats
-  [times.sum, times.mean, times.std_dev] = stats(times.stock);
-  [heaps.sum, heaps.mean, heaps.std_dev] = stats(heaps.stock);
+    // test
+    for (let i = 0; i < cap; i++) trash.pick(memTest(fn, args, heaps.stock, trash));
+    for (let i = 0; i < cap; i++) trash.pick(speedTest(fn, args, times.stock, trash));
 
-  // treat
-  if (isObject(trash)) trash = dress(trash);
-  let key: keyof Result;
-  for (key in stats_time) stats_time[key] = convert(times[key], utils.time).join(" ");
-  for (key in stats_mem) stats_mem[key] = convert(heaps[key], utils.mem).join(" ");
+    // stats
+    [times.sum, times.mean, times.std_dev] = stats(times.stock);
+    [heaps.sum, heaps.mean, heaps.std_dev] = stats(heaps.stock);
 
-  // log
-  return log(stats_time, stats_mem, cap, trash);
+    // treat
+    let key: keyof Result;
+    for (key in stats_time) stats_time[key] = convert(times[key], utils.time).join(" ");
+    for (key in stats_mem) stats_mem[key] = convert(heaps[key], utils.mem).join(" ");
+    resolve(log(stats_time, stats_mem, cap, trash.dress()));
+  });
 };
 
-function init(): [Data, Data, string | unknown, Utils, Results] {
+function init(): [Data, Data, Utils, Results] {
   const times = {
     sum: 0,
     mean: 0,
@@ -92,7 +126,7 @@ function init(): [Data, Data, string | unknown, Utils, Results] {
       std_dev: "",
     },
   };
-  return [times, heaps, "", utils, results];
+  return [times, heaps, utils, results];
 }
 
 function speedTest(fn: Function, args: unknown[], stock: number[], trash: unknown) {
@@ -139,21 +173,6 @@ function convert(
   return [data, "unknown"];
 }
 
-function dress(trash: Dressable): string {
-  let arr: any[][] = Object.entries(trash);
-  arr = arr.map((entry) => {
-    return entry.map((value) => {
-      typeof value === "function" || (value && value.constructor === RegExp)
-        ? (value = value.toString())
-        : value;
-      return value;
-    });
-  });
-  trash = Object.fromEntries(arr);
-  trash = JSON.stringify(trash, null, 15);
-  return trash;
-}
-
 function log(times: Result, heaps: Result, cap: number, trash: unknown) {
   return `
     ${chalk.blue("Total Runtime        : ")}${times.sum}
@@ -167,8 +186,4 @@ function log(times: Result, heaps: Result, cap: number, trash: unknown) {
     ${chalk.blue("Performed            : ")}${cap} times
     ${chalk.blue("Last Result          : ")}${trash}
     `;
-}
-
-function isObject(obj: unknown): obj is Record<string, unknown> {
-  return typeof obj === "object" && obj !== null && !Array.isArray(obj);
 }
