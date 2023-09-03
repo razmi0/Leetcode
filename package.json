@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "log": "nodemon out/work.js",
-    "start": "tsc -w"
+    "start": "tsc -w",
+    "dev": "tsc -w && npx vite dev --open --port 6789"
   },
   "keywords": [],
   "author": "",
@@ -15,5 +16,8 @@
     "@types/node": "^20.5.7",
     "chalk": "^5.3.0",
     "nodemon": "^3.0.1"
+  },
+  "dependencies": {
+    "vite": "^4.4.9"
   }
 }
