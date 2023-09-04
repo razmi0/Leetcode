@@ -7,7 +7,7 @@
   "scripts": {
     "log": "nodemon out/work.js",
     "start": "tsc -w",
-    "dev": "tsc -w && npx vite dev --open --port 6789"
+    "dev": "npx vite dev --open --port 6789"
   },
   "keywords": [],
   "author": "",

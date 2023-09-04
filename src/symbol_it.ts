@@ -30,9 +30,11 @@ declare global {
 declare global {
   interface Number {
     convert(): number;
+    fib(): number;
   }
   interface NumberConstructor {
     convert(): number;
+    fib(): number;
   }
 }
 
@@ -45,24 +47,33 @@ declare global {
   }
 }
 
-console.log(..."ghj"); // g h j
-const t = typeof [..."tgh"];
-console.log(t); // object
-
-console.log(typeof [..."ghj"]); // string
+// Number.prototype[Symbol.iterator] = function* () {
+//   for (let i = 0; i < (this as number); i++) {
+//     yield i;
+//   }
+// };
 
 Number.prototype.convert = function (): number {
   return this.valueOf() + 10;
 };
 
+Number.prototype[Symbol.iterator] = function* () {
+  yield 0;
+  let a = 1;
+  let b = 1;
+  while (this.valueOf() > a) {
+    yield a;
+    [a, b] = [b, a + b];
+  }
+};
+
+console.log("Symbol.iterator :>> ...5 "); // fib
+console.log(...20);
+console.log("end");
+
 console.log((5).convert()); // 0.005
 
 // Here we will see how to use the iterator protocol to iterate over objects and arrays.
-Number.prototype[Symbol.iterator] = function* () {
-  for (let i = 0; i < (this as number); i++) {
-    yield i;
-  }
-};
 
 // Object.prototype[Symbol.iterator] = function* () {
 //   for (let key in this) {
@@ -71,6 +82,7 @@ Number.prototype[Symbol.iterator] = function* () {
 // };
 // now that we call Object.constructor.prototype[Symbol.iterator] = function* () {} we can iterate over any object
 // for example:
+
 const obj23 = {
   a: "Here ",
   b: 2,
