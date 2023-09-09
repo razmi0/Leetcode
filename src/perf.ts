@@ -23,7 +23,7 @@ type Result = {
 type Fn<Y> = (...args: Y[]) => any;
 type Args<Y> = Y[];
 
-export const perf = async <T>(fn: Fn<T>, args: Args<T>, cap: number): Promise<string> => {
+export const perf = async <T>(fn: Fn<T>, args: Args<T>, cap: number = 100000): Promise<string> => {
   return new Promise((resolve) => {
     //init
     const trash = new Trash();
@@ -43,7 +43,7 @@ export const perf = async <T>(fn: Fn<T>, args: Args<T>, cap: number): Promise<st
     for (key in stats_mem) stats_mem[key] = heaps[key].convert().read();
 
     // return
-    resolve(log(stats_time, stats_mem, cap, trash.dress()));
+    resolve(log(fn.name, stats_time, stats_mem, cap, trash.dress()));
   });
 };
 
@@ -103,8 +103,9 @@ function stats(stock: number[]): [number, number, number] {
   return [sum, mean, std_dev];
 }
 
-function log(t_stats: Result, h_stats: Result, cap: number, trash: unknown) {
+function log(fnName: string, t_stats: Result, h_stats: Result, cap: number, trash: unknown) {
   return `
+    ${chalk.blue("Function             : ")}${fnName}
     ${chalk.blue("Total Runtime        : ")}${t_stats.sum}
     ${chalk.blue("Average Runtime/Fn   : ")}${t_stats.mean}
     ${chalk.blue("SD                   : ")}± ${t_stats.std_dev}
