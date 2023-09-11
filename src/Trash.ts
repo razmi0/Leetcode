@@ -32,4 +32,6 @@ class Trash {
   }
 }
 
+// ⧹╲⎝⧹༼◕ ͜oﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞ.◕ ༽⧸⎠╱⟋╱
+
 export default Trash;
