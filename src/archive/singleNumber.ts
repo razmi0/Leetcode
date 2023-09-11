@@ -19,3 +19,9 @@ function singleNumber(nums: number[]): number {
 
   return mask;
 }
+
+// Inside the loop, it updates the mask variable using the XOR (^) operation.
+// The XOR operation has the property that if you XOR the same number twice,
+// the result is 0. Therefore, when you XOR all the numbers in the array, the
+// numbers that appear twice will cancel each other out, leaving only the number
+// that appears once in the mask variable.
