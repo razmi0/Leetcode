@@ -16,3 +16,7 @@ console.log("check if number is odd : " + (n & 1));
 console.log("check if number is even : " + (n & 2));
 console.log("set number to odd : " + (n | 1));
 console.log("set number to even : " + (n & ~1));
+// ^
+console.log("toggle the 3rd bit : " + (n ^ 4));
+console.log("toggle the 3rd bit : " + (n ^ 8));
+console.log("toggle the 3rd bit : " + (n ^ 16));
