@@ -1,13 +1,19 @@
 // UTILS
 // Bitwise operators & bit manipulation
 // Operators: & | ^ ~ << >> >>>
+function isPowerOfTwo(n: number) {
+  if (n <= 0) return false;
+  return (n & (n - 1)) == 0 ? true : false;
+}
 
 const n = 2;
-console.log("multiplication by 2 : " + (n << 1));
-console.log("multiplication by 4 : " + (n << 2));
-console.log("multiplication by 8 : " + (n << 3));
+console.log("multiplication by 2  : " + (n << 1));
+console.log("multiplication by 4  : " + (n << 2));
+console.log("multiplication by 8  : " + (n << 3));
 console.log("multiplication by 16 : " + (n << 4));
+console.log("is power of 2        : " + isPowerOfTwo(n));
 
+//
 console.log("division by 2 : " + (n >> 1));
 console.log("division by 2 (without sign) : " + (n >>> 1));
 console.log("division by 4 : " + (n >> 2));
