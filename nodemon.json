@@ -1,4 +1,4 @@
 {
   "verbose": false,
-  "watch": ["out/work.js"]
+  "watch": ["out/work.js", "out/utils.js"]
 }

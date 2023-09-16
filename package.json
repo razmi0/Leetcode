@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "log": "nodemon out/work.js",
+    "log": "nodemon out/work.js && out/utils.js",
     "start": "tsc -w",
     "dev": "npx vite dev --open --port 6789"
   },
