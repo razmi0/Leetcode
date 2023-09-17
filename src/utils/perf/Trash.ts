@@ -2,9 +2,13 @@ class Trash {
   public value: unknown | Record<string, unknown> | (string & {});
   public dressed: string | null = null;
   private isObject(): this is { value: Record<string, unknown> } {
-    return typeof this.value === "object" && this.value !== null && !Array.isArray(this.value);
+    return (
+      typeof this.value === "object" &&
+      this.value !== null &&
+      !Array.isArray(this.value)
+    );
   }
-  dress(): this | string {
+  dress(): unknown {
     if (this.isObject()) {
       let arr: any[][] = Object.entries(this.value);
       arr = arr.map((entry) => {
@@ -18,7 +22,7 @@ class Trash {
       this.value = Object.fromEntries(arr);
       return (this.dressed = JSON.stringify(this.value, null, 15));
     }
-    return this;
+    return this.value;
   }
   valueOf() {
     return this.dress() || this.value;
