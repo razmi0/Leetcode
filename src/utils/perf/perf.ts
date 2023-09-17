@@ -23,19 +23,29 @@ type Result = {
 type Fn<Y> = (...args: Y[]) => any;
 type Args<Y> = Y[];
 
-export const perf = async <T>(fn: Fn<T>, args: Args<T>, cap: number = 100000): Promise<string> => {
+export const perf = async <T>(
+  fn: Fn<T>,
+  args: Args<T>,
+  cap: number = 100000
+): Promise<string> => {
   return new Promise((resolve) => {
     //init
     const trash = new Trash();
     let [times, heaps, { stats_time, stats_mem }] = init();
 
     // test
-    for (let i = 0; i < cap; i++) trash.pick(memTest(fn, args, heaps.stock, trash));
-    for (let i = 0; i < cap; i++) trash.pick(speedTest(fn, args, times.stock, trash));
+    for (let i = 0; i < cap; i++)
+      trash.pick(memTest(fn, args, heaps.stock, trash));
+    for (let i = 0; i < cap; i++)
+      trash.pick(speedTest(fn, args, times.stock, trash));
 
     // stats
-    [times.sum.value, times.mean.value, times.std_dev.value] = stats(times.stock);
-    [heaps.sum.value, heaps.mean.value, heaps.std_dev.value] = stats(heaps.stock);
+    [times.sum.value, times.mean.value, times.std_dev.value] = stats(
+      times.stock
+    );
+    [heaps.sum.value, heaps.mean.value, heaps.std_dev.value] = stats(
+      heaps.stock
+    );
 
     // treat
     let key: keyof Result;
@@ -75,7 +85,12 @@ function init(): [Data, Data, Results] {
   return [times, heaps, results];
 }
 
-function speedTest(fn: Function, args: unknown[], stock: number[], trash: unknown) {
+function speedTest(
+  fn: Function,
+  args: unknown[],
+  stock: number[],
+  trash: unknown
+) {
   const start_time = performance.now();
   trash = fn(...args);
   const end_time = performance.now();
@@ -83,7 +98,12 @@ function speedTest(fn: Function, args: unknown[], stock: number[], trash: unknow
   return trash;
 }
 
-function memTest(fn: Function, args: unknown[], stock: number[], trash: unknown) {
+function memTest(
+  fn: Function,
+  args: unknown[],
+  stock: number[],
+  trash: unknown
+) {
   const start_mem_xp = memoryUsage().rss;
   trash = fn(...args);
   const end_mem_xp = memoryUsage().rss;
@@ -98,12 +118,19 @@ function stats(stock: number[]): [number, number, number] {
   sum = stock.reduce((a, b) => a + b, 0);
   mean = sum / stock.length;
   std_dev = Math.sqrt(
-    stock.map((num) => (num - mean) ** 2).reduce((a, b) => a + b, 0) / stock.length
+    stock.map((num) => (num - mean) ** 2).reduce((a, b) => a + b, 0) /
+      stock.length
   );
   return [sum, mean, std_dev];
 }
 
-function log(fnName: string, t_stats: Result, h_stats: Result, cap: number, trash: unknown) {
+function log(
+  fnName: string,
+  t_stats: Result,
+  h_stats: Result,
+  cap: number,
+  trash: unknown
+) {
   return `
     ${chalk.blue("Function             : ")}${fnName}
     ${chalk.blue("Total Runtime        : ")}${t_stats.sum}

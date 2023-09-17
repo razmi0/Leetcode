@@ -1,4 +1,4 @@
-import { perf } from "../perf.js";
+import { perf } from "../../utils/perf/perf.js";
 // console.log(
 //   perf(
 //     (arg: string) => {

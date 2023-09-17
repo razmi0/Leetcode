@@ -17,6 +17,12 @@ function* inorderTraversal(
   yield* traverse(arr);
 }
 
+function* inorderTraversal2(
+  arr: MultidimensionalArray
+): Generator<number, void, unknown> {
+  for (const x of arr) Array.isArray(x) ? yield* inorderTraversal(x) : yield x;
+}
+
 const gen = inorderTraversal([1, [2, 3], 2, 8]);
 console.log(
   gen.next().value, // 1
