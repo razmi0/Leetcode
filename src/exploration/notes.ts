@@ -1,38 +1,43 @@
+import chalk from "chalk";
+
 // UTILS
 // Bitwise operators & bit manipulation
 // Operators: & | ^ ~ << >> >>>
 
-import chalk from "chalk";
+const _ = console.log;
+const cY = chalk.yellow;
+const cR = chalk.red;
+const cG = chalk.green;
+const cB = chalk.blue;
+let n: number = +process.argv[2];
 
-const n = 12;
-console.log(chalk.red("n = " + n));
-console.log(chalk.blue("multiplication "));
-console.log(chalk.green("by 2 : ") + chalk.yellow(n << 1));
-console.log(chalk.green("by 4 : ") + chalk.yellow(n << 2));
-console.log(chalk.green("by 8 : ") + chalk.yellow(n << 3));
-console.log(chalk.green("by 16 : ") + chalk.yellow(n << 4));
+_(cR("n = " + n));
+_(cB("multiplication "));
+_(cG("by 2 : ") + cY(n << 1));
+_(cG("by 4 : ") + cY(n << 2));
+_(cG("by 8 : ") + cY(n << 3));
+_(cG("by 16 : ") + cY(n << 4));
 
 //
-console.log(chalk.blue("division ")); // >>> for unsigned
-console.log(chalk.green("by 2 : ") + chalk.yellow(n >> 1));
-console.log(chalk.green("by 4 : ") + chalk.yellow(n >> 2));
-console.log(chalk.green("by 8 : ") + chalk.yellow(n >> 3));
-console.log(chalk.green("by 16 : ") + chalk.yellow(n >> 4));
+_(cB("division ")); // >>> for unsigned
+_(cG("by 2 : ") + cY(n >> 1));
+_(cG("by 4 : ") + cY(n >> 2));
+_(cG("by 8 : ") + cY(n >> 3));
+_(cG("by 16 : ") + cY(n >> 4));
 
-console.log(chalk.blue("odd or even ? "));
-let a = (n & 1) == 0;
-let b = (n & 0) == 0;
-console.log(chalk.green("odd : ") + chalk.yellow(a));
-console.log(chalk.green("even : ") + chalk.yellow(b));
+_(cB("odd or even ? "));
+_(cG("odd : ") + cY(n & 1));
+_(cG("even : ") + cY(n & 0));
 
-console.log(chalk.blue("set to odd or even "));
-console.log(chalk.green("set number to odd : ") + chalk.yellow(n | 1));
-console.log(chalk.green("set number to even : ") + chalk.yellow(n & ~1));
+_(cB("set to odd or even "));
+_(cG("set number to odd : ") + cY(n | 1));
+_(cG("set number to even : ") + cY(n & ~1));
 
 // ^
-console.log(chalk.blue("toggle bits"));
-console.log(chalk.green("toggle bit 1 : ") + chalk.yellow(n ^ 1));
-console.log(chalk.green("toggle bit 2 : ") + chalk.yellow(n ^ 2));
+_(cB("toggle bits"));
+_(cG("toggle bit 1 : ") + cY(n ^ 1));
+_(cG("toggle bit 2 : ") + cY(n ^ 2));
+_(cG("toggle bit 3 : ") + cY(n ^ 3));
 
 // Looping multiple times over object/array
 // let i = 0,
