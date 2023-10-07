@@ -1,1 +1,1 @@
-const cL = console.log;
+import { cL } from "./index.js";
