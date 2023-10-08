@@ -1,12 +1,14 @@
+import { cL } from "../../index.js";
+
 declare global {
   interface Array<T> {
-    mySort(this: number[]): number[];
+    bubbleSort(this: number[]): number[];
   }
 }
 
 // Bubble sort
 // --
-Array.prototype.mySort = function (this: number[]) {
+Array.prototype.bubbleSort = function (this: number[]) {
   let swapped;
 
   while (swapped) {
@@ -21,3 +23,5 @@ Array.prototype.mySort = function (this: number[]) {
 
   return this;
 };
+
+cL([8, 3, 0, 1, 9, 3, 9, 6, 7, 8].bubbleSort());
