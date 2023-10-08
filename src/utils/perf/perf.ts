@@ -23,7 +23,8 @@ type Result = {
 type Fn<Y> = (...args: Y[]) => any;
 type Args<Y> = Y[];
 
-export const perf = async <T>(
+// Async version
+export const perfAsync = async <T>(
   fn: Fn<T>,
   args: Args<T>,
   cap: number = 100000
@@ -55,6 +56,35 @@ export const perf = async <T>(
     // return
     resolve(log(fn.name, stats_time, stats_mem, cap, trash.dress()));
   });
+};
+
+// Sync version
+export const perfSync = <T>(
+  fn: Fn<T>,
+  args: Args<T>,
+  cap: number = 100000
+): string => {
+  //init
+  const trash = new Trash();
+  let [times, heaps, { stats_time, stats_mem }] = init();
+
+  // test
+  for (let i = 0; i < cap; i++)
+    trash.pick(memTest(fn, args, heaps.stock, trash));
+  for (let i = 0; i < cap; i++)
+    trash.pick(speedTest(fn, args, times.stock, trash));
+
+  // stats
+  [times.sum.value, times.mean.value, times.std_dev.value] = stats(times.stock);
+  [heaps.sum.value, heaps.mean.value, heaps.std_dev.value] = stats(heaps.stock);
+
+  // treat
+  let key: keyof Result;
+  for (key in stats_time) stats_time[key] = times[key].convert().read();
+  for (key in stats_mem) stats_mem[key] = heaps[key].convert().read();
+
+  // return
+  return log(fn.name, stats_time, stats_mem, cap, trash.dress());
 };
 
 function init(): [Data, Data, Results] {
