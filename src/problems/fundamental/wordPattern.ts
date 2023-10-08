@@ -1,4 +1,4 @@
-import { perf } from "../../utils/perf/perf.js";
+import { perfAsync } from "../../utils/perf/perf.js";
 // console.log(
 //   perf(
 //     (arg: string) => {
@@ -27,6 +27,6 @@ function wordPattern(pattern: string, s: string): boolean {
   return true;
 }
 (async () => {
-  const a = perf(wordPattern, ["abba", "dog cat cat fish"], 10) // false
+  const a = perfAsync(wordPattern, ["abba", "dog cat cat fish"], 10) // false
     .then(console.log);
 })();
