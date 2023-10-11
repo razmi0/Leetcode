@@ -4,6 +4,8 @@ import Time from "./Time.js";
 import Mem from "./Mem.js";
 import Trash from "./Trash.js";
 
+// TODO : add description param to perfAsync
+
 type Data = {
   sum: Mem | Time;
   mean: Mem | Time;
@@ -24,6 +26,13 @@ type Fn<Y> = (...args: Y[]) => any;
 type Args<Y> = Y[];
 
 // Async version
+/**
+ * Test the performance of an async function
+ * @param fn Function to test
+ * @param args Arguments to pass to the function
+ * @param cap Number of times to run the test
+ * @returns A promise that resolves to a string summarizing the test
+ */
 export const perfAsync = async <T>(
   fn: Fn<T>,
   args: Args<T>,
@@ -59,9 +68,18 @@ export const perfAsync = async <T>(
 };
 
 // Sync version
+/**
+ * Test the performance of a sync function
+ * @param fn Function to test
+ * @param args Arguments to pass to the function
+ * @param description Optionnal description of the function (default: "No description")
+ * @param cap Optionnal number of times to run the test (default: 100000)
+ * @returns A string summarizing the test
+ */
 export const perfSync = <T>(
   fn: Fn<T>,
   args: Args<T>,
+  description: string = "",
   cap: number = 100000
 ): string => {
   //init
@@ -84,7 +102,7 @@ export const perfSync = <T>(
   for (key in stats_mem) stats_mem[key] = heaps[key].convert().read();
 
   // return
-  return log(fn.name, stats_time, stats_mem, cap, trash.dress());
+  return log(fn.name, stats_time, stats_mem, cap, trash.dress(), description);
 };
 
 function init(): [Data, Data, Results] {
@@ -159,10 +177,15 @@ function log(
   t_stats: Result,
   h_stats: Result,
   cap: number,
-  trash: unknown
+  trash: unknown,
+  description?: string
 ) {
+  description =
+    description == "" ? (description = "No description") : description;
   return `
     ${chalk.blue("Function             : ")}${fnName}
+    ${chalk.blue("Description          : ")}${description}
+    ---
     ${chalk.blue("Total Runtime        : ")}${t_stats.sum}
     ${chalk.blue("Average Runtime/Fn   : ")}${t_stats.mean}
     ${chalk.blue("SD                   : ")}± ${t_stats.std_dev}

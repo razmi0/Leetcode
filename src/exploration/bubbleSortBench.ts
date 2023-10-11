@@ -66,6 +66,6 @@ const bubbleSort3 = (arr: number[]): number[] => {
 
 const arr = [5, 8, 2, 9, 0, 3, 7, 4, 8, 4, 2, 2, 5, 6, 8];
 
-cL(perfSync(bubbleSort, [arr], 1000000));
-cL(perfSync(bubbleSort2, [arr], 1000000));
-cL(perfSync(bubbleSort3, [arr], 1000000));
+cL(perfSync(bubbleSort, [arr], "do while version", 1000000));
+cL(perfSync(bubbleSort2, [arr], "while version", 1000000));
+cL(perfSync(bubbleSort3, [arr], "for version", 1000000));
