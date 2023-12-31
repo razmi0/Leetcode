@@ -1,6 +1,6 @@
 # LeetCodes
 
-<br><br>
+![](https://leetcard.jacoblin.cool/razmio?ext=activity&theme=nord)
 
 # Exploration
 
