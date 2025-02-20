@@ -1,4 +1,5 @@
 import chalk from "chalk";
+import process from "node:process";
 
 // UTILS
 // Bitwise operators & bit manipulation
